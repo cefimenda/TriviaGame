@@ -13,12 +13,89 @@
     <title>Trivia</title>
 </head>
 <body>
+    <!-- SETTINGS MODAL -->
+    <div class="modal settingsModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h5 class="modal-title">Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                    <div class="row">
+                        <div class="col-12 mx-auto">
+                            <div class="form-group">
+                                <label for="categorySelect">Category</label>
+                                <select multiple class="form-control" id="categorySelect">
+                                    <option value="0" selected>Any Category</option>
+                                    <option value="9">General Knowledge</option>
+                                    <option value="10">Entertainment: Books</option>
+                                    <option value="11">Entertainment: Film</option>
+                                    <option value="12">Entertainment: Music</option>
+                                    <option value="13">Entertainment: Musicals & Theatres</option>
+                                    <option value="14">Entertainment: Television</option>
+                                    <option value="15">Entertainment: Video Games</option>
+                                    <option value="16">Entertainment: Board Games</option>
+                                    <option value="17">Science & Nature</option>
+                                    <option value="18">Science: Computers</option>
+                                    <option value="19">Science: Mathematics</option>
+                                    <option value="20">Mythology</option>
+                                    <option value="21">Sports</option>
+                                    <option value="22">Geography</option>
+                                    <option value="23">History</option>
+                                    <option value="24">Politics</option>
+                                    <option value="25">Art</option>
+                                    <option value="26">Celebrities</option>
+                                    <option value="27">Animals</option>
+                                    <option value="28">Vehicles</option>
+                                    <option value="29">Entertainment: Comics</option>
+                                    <option value="30">Science:Gadgets</option>
+                                    <option value="31">Entertainment: Japanese Anime & Manga</option>
+                                    <option value="32">Entertainment: Cartoon & Animations</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mx-auto">
+                            <div class="form-group">
+                                <label for="difficultySelect">Difficulty</label>
+                                <select class="form-control" id="difficultySelect">
+                                    <option value = "0">Any</option>
+                                    <option value = "easy">Easy</option>
+                                    <option value = "medium">Medium</option>
+                                    <option value = "hard">Hard</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 mx-auto">
+                            <div class="form-group">
+                                <label for="typeSelect">Type</label>
+                                <select class="form-control" id="typeSelect">
+                                    <option value = "0">Any</option>
+                                    <option value = "multiple">Multiple Choice</option>
+                                    <option value = "boolean">True/False</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL -->
     <div class="container">
         <div class="card p-5 m-5 shadow-lg display">
             <div class="row">
                 <div class="col-12 title text-center">
                     <h1>Impossible Trivia</h1>
-                    <button class="btn-outline-secondary btn-sm mb-3 float-right">Settings</button>
+                    <button class="btn-outline-secondary btn-sm mb-3 float-right settings">Settings</button>
                 </div>
             </div>
             <div class="row text-center my-2 shadow-sm">

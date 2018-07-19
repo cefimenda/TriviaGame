@@ -40,16 +40,43 @@ $(function(){
         game.getQuestion()
     });
     $(".playerHighScore").text(player.highscore)
+    $(".settings").click(function(){
+        $(".settingsModal").modal('toggle')
+    });
 });
 var settings = {
     initTime : 10,
     qCount:10,
-    category:'All',
-    difficulty:'Any',
-    type:'Any'
+    category:function(){
+        var cat = $("#categorySelect option:selected").val()
+        if (cat ===undefined || cat == 0){
+            return null
+        }
+        parameters.category = cat
+        return cat
+    },
+    difficulty:function(){
+        var diff = $("#difficultySelect option:selected").val()
+        if(diff===undefined||diff==0){
+            return null
+        }
+        parameters.difficulty = diff
+        return diff
+    },
+    type:function(){
+        var type = $("#typeSelect option:selected").val()
+        if(type===undefined||type==0){
+            return null
+        }
+        parameters.type = type
+        return type
+    }
 }
 var parameters={
-    amount:1
+    amount:1,
+    category:settings.category(),
+    difficulty:settings.difficulty(),
+    type:settings.type()
 }
 var game = {
     url:function(){
@@ -66,7 +93,9 @@ var game = {
             game.end()
             return
         }
-
+        settings.category()
+        settings.difficulty()
+        settings.type()
         $.ajax({
             url:game.url(),
             method:'GET'
@@ -110,6 +139,10 @@ var game = {
     counter: function(){
         game.displayCounter() //making sure that counter is displayed before or with the question.
         var timer = setInterval(()=>{
+            if ($("body").hasClass("modal-open")){
+                console.log('modal')
+                return
+            }
             if (game.timeLeft === 0){
                 clearInterval(timer)
                 game.timeOut()
@@ -169,6 +202,7 @@ var game = {
     },
     end: function(){
         game.clear();
+        game.displayData()
         var title = $("<h3 class='text-center'>").html("You have answered 10 questions!<br>Your score for this round is: <p>"+player.score+"</p>")
         var btn = $("<button class = 'btn-outline-success restart mx-auto'>").text("Play Again")
         $(".answers").append(title);
