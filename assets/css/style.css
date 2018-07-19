@@ -1,3 +1,13 @@
 body{
-    background:black;
+    background-image:url("../images/trivia-tuesdays-background.jpg");
+    background-size: cover;
+}
+.answerOption{
+}
+h5{
+}
+h1{
+    font-family: 'Gaegu', cursive;
+    font-size: 60px;
+
 }

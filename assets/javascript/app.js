@@ -17,7 +17,7 @@ $(function(){
     });
     $(".answers").on('click','.answerOption',function(){
         if (game.answerSelected === false){
-            if(game.timeLeft===10){
+            if(game.isThereTime ===false){
                 return
             }
             game.answerSelected=true;
@@ -102,6 +102,7 @@ var game = {
     },
     start:function(){
         game.getQuestion()
+        $('h4').show()
     },
     settingsCheck:function(){
         settings.category()
@@ -113,6 +114,7 @@ var game = {
         player.highscore = localStorage.getItem("highscore-"+settings.qCount)||"0/"+settings.qCount
     },
     getQuestion:function(){
+        game.isThereTime=true
         if (game.questionNumber >= settings.qCount){
             game.end()
             return
@@ -179,7 +181,10 @@ var game = {
             game.timeLeft -= 1
         },1000)
     },
+    isThereTime:true,
     timeOut:function(){
+        if(game.answerSelected===true){return}
+        game.isThereTime=false
         $(".progress-bar").css({'width':'0%'})
         player.wrong();
         $(".description").children().first().hide()
@@ -222,6 +227,7 @@ var game = {
         $(".playerHighScore").text(player.highscore)
     },
     end: function(){
+        $("h4").hide()
         player.highscore = localStorage.getItem("highscore-"+game.questionNumber)||"0/"+game.questionNumber
         var highscoreMagnitude = Number(player.highscore.split('/')[0])/Number(player.highscore.split('/')[1])
         if(player.score/game.questionNumber>highscoreMagnitude||isNaN(highscoreMagnitude)){
