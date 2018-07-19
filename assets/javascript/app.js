@@ -48,7 +48,6 @@ var settings = {
     initTime : 10,
     initTimeCheck:function(){
         var timeInit = $("#timeInput").val()
-        console.log(timeInit)
         if (timeInit ===undefined || timeInit ==0 || timeInit ==""){
             settings.initTime = 10
             return
@@ -99,7 +98,6 @@ var game = {
     url:function(){
         var url = "https://opentdb.com/api.php";
         url+= '?' +$.param(parameters);
-        console.log(url)
         return url
     },
     start:function(){
@@ -164,7 +162,6 @@ var game = {
         game.displayCounter() //making sure that counter is displayed before or with the question.
         var timer = setInterval(()=>{
             if ($("body").hasClass("modal-open")){
-                console.log('modal')
                 return
             }
             if (game.timeLeft === 0){
@@ -220,7 +217,7 @@ var game = {
     },
     questionNumber:0,
     displayData:function(){
-        $(".questionCount").text(game.questionNumber);
+        $(".questionCount").text(game.questionNumber+"/"+settings.qCount);
         $(".playerScore").text(player.score);
         $(".playerHighScore").text(player.highscore)
     },
@@ -285,12 +282,9 @@ function findAnswerCard(text){
 function randomizeAnswers(correct,incorrects){
     var list = [];
     incorrects.push(correct);
-    console.log(incorrects)
     for (var i =0 ; i<incorrects.length;i++){
         var randIndex = Math.floor(Math.random()*(list.length+1));
-        console.log(randIndex)
         list.splice(randIndex,0,incorrects[i]);
     }
-    console.log(list)
     return list
 }
