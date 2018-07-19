@@ -43,9 +43,21 @@ $(function(){
 });
 var settings = {
     initTime : 10,
-    category:
+    qCount:10,
+    category:'All',
+    difficulty:'Any',
+    type:'Any'
+}
+var parameters={
+    amount:1
 }
 var game = {
+    url:function(){
+        var url = "https://opentdb.com/api.php";
+        url+= '?' +$.param(parameters);
+        console.log(url)
+        return url
+    },
     start:function(){
         game.getQuestion()
     },
@@ -54,11 +66,12 @@ var game = {
             game.end()
             return
         }
-        game.counter()
+
         $.ajax({
-            url:'https://opentdb.com/api.php?amount=1',
+            url:game.url(),
             method:'GET'
         }).then(function(response){
+            game.counter()
             game.clear()
             game.round = new Question(response)
             game.displayQuestion()
