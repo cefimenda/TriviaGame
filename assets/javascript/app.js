@@ -214,6 +214,8 @@ var player = {
         var selectedCard = findAnswerCard(player.selection||" ")
         var correctAnswerCard = findAnswerCard(game.round.correct)
         if(selectedCard != undefined){selectedCard.addClass('bg-danger')}
+        $(".progress-bar").removeClass("bg-warning")
+        $(".progress-bar").addClass("bg-danger")
         correctAnswerCard.addClass('bg-success text-light')
     },
     correct:function(){
@@ -224,6 +226,8 @@ var player = {
         if(player.score>player.highscore){
             player.highscore=player.score
         }
+        $(".progress-bar").removeClass("bg-warning")
+        $(".progress-bar").addClass("bg-success")
         localStorage.setItem("highscore",player.highscore)
     },
     score:0,
@@ -255,9 +259,12 @@ function findAnswerCard(text){
 function randomizeAnswers(correct,incorrects){
     var list = [];
     incorrects.push(correct);
+    console.log(incorrects)
     for (var i =0 ; i<incorrects.length;i++){
-        var randIndex = Math.floor(Math.random()*list.length);
+        var randIndex = Math.floor(Math.random()*list.length+1);
+        console.log(randIndex)
         list.splice(randIndex,0,incorrects[i]);
     }
+    console.log(list)
     return list
 }
