@@ -46,7 +46,24 @@ $(function(){
 });
 var settings = {
     initTime : 10,
+    initTimeCheck:function(){
+        var timeInit = $("#timeInput").val()
+        console.log(timeInit)
+        if (timeInit ===undefined || timeInit ==0 || timeInit ==""){
+            settings.initTime = 10
+            return
+        }
+        settings.initTime=timeInit
+    },
     qCount:10,
+    qCountCheck:function(){
+        var qCount = $("#qCountInput").val()
+        if (qCount ===undefined || qCount ==0 || qCount ==""){
+            settings.qCount = 10
+            return
+        }
+        settings.qCount=qCount
+    },
     category:function(){
         var cat = $("#categorySelect option:selected").val()
         if (cat ===undefined || cat == 0){
@@ -88,14 +105,20 @@ var game = {
     start:function(){
         game.getQuestion()
     },
-    getQuestion:function(){
-        if (game.questionNumber ==10){
-            game.end()
-            return
-        }
+    settingsCheck:function(){
         settings.category()
         settings.difficulty()
         settings.type()
+        settings.qCountCheck()
+        settings.initTimeCheck()
+        game.timeLeft = settings.initTime
+    },
+    getQuestion:function(){
+        if (game.questionNumber >= settings.qCount){
+            game.end()
+            return
+        }
+        game.settingsCheck()
         $.ajax({
             url:game.url(),
             method:'GET'
@@ -201,9 +224,14 @@ var game = {
         $(".playerHighScore").text(player.highscore)
     },
     end: function(){
+        var highscoreMagnitude = Number(player.highscore.split('/')[0])/Number(player.highscore.split('/')[1])
+        if(player.score/game.questionNumber>highscoreMagnitude||isNaN(highscoreMagnitude)){
+            player.highscore=player.score+"/"+game.questionNumber
+        }
+        localStorage.setItem("highscore",player.highscore)
         game.clear();
         game.displayData()
-        var title = $("<h3 class='text-center'>").html("You have answered 10 questions!<br>Your score for this round is: <p>"+player.score+"</p>")
+        var title = $("<h3 class='text-center'>").html("You have answered "+game.questionNumber+" questions!<br>Your score for this round is: <p>"+player.score+"/"+game.questionNumber+"</p>")
         var btn = $("<button class = 'btn-outline-success restart mx-auto'>").text("Play Again")
         $(".answers").append(title);
         $(".answers").append(btn)
@@ -223,15 +251,11 @@ var player = {
         var correctAnswerCard = findAnswerCard(game.round.correct)
         correctAnswerCard.removeClass("bg-warning")
         correctAnswerCard.addClass('bg-success text-light')
-        if(player.score>player.highscore){
-            player.highscore=player.score
-        }
         $(".progress-bar").removeClass("bg-warning")
         $(".progress-bar").addClass("bg-success")
-        localStorage.setItem("highscore",player.highscore)
     },
     score:0,
-    highscore:Number(localStorage.getItem("highscore"))||0
+    highscore:localStorage.getItem("highscore")||"0"
 }
 function Question(response){
     this.question=response.results[0].question
@@ -261,7 +285,7 @@ function randomizeAnswers(correct,incorrects){
     incorrects.push(correct);
     console.log(incorrects)
     for (var i =0 ; i<incorrects.length;i++){
-        var randIndex = Math.floor(Math.random()*list.length+1);
+        var randIndex = Math.floor(Math.random()*(list.length+1));
         console.log(randIndex)
         list.splice(randIndex,0,incorrects[i]);
     }
