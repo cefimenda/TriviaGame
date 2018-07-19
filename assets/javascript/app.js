@@ -112,6 +112,7 @@ var game = {
         settings.qCountCheck()
         settings.initTimeCheck()
         game.timeLeft = settings.initTime
+        player.highscore = localStorage.getItem("highscore-"+settings.qCount)||"0/"+settings.qCount
     },
     getQuestion:function(){
         if (game.questionNumber >= settings.qCount){
@@ -224,11 +225,12 @@ var game = {
         $(".playerHighScore").text(player.highscore)
     },
     end: function(){
+        player.highscore = localStorage.getItem("highscore-"+game.questionNumber)||"0/"+game.questionNumber
         var highscoreMagnitude = Number(player.highscore.split('/')[0])/Number(player.highscore.split('/')[1])
         if(player.score/game.questionNumber>highscoreMagnitude||isNaN(highscoreMagnitude)){
             player.highscore=player.score+"/"+game.questionNumber
         }
-        localStorage.setItem("highscore",player.highscore)
+        localStorage.setItem("highscore-"+game.questionNumber,player.highscore)
         game.clear();
         game.displayData()
         var title = $("<h3 class='text-center'>").html("You have answered "+game.questionNumber+" questions!<br>Your score for this round is: <p>"+player.score+"/"+game.questionNumber+"</p>")
@@ -255,7 +257,7 @@ var player = {
         $(".progress-bar").addClass("bg-success")
     },
     score:0,
-    highscore:localStorage.getItem("highscore")||"0"
+    highscore:localStorage.getItem("highscore-"+settings.qCount)||"0/"+settings.qCount
 }
 function Question(response){
     this.question=response.results[0].question
