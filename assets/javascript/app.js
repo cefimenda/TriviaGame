@@ -42,7 +42,8 @@ $(function(){
     $(".playerHighScore").text(player.highscore)
 });
 var settings = {
-    initTime : 10
+    initTime : 10,
+    category:
 }
 var game = {
     start:function(){
@@ -72,6 +73,15 @@ var game = {
         card.append(qTitle)
         $(".answers").append(card)
         $(".answers").removeClass('d-none')
+        var prog = $("<div class = 'progress'>")
+        prog.css({'height':'3px'})
+        var bar = $("<div class='progress-bar bg-warning'>").attr('role','progressbar')
+        bar.attr('aria-valuenow',"0")
+        bar.attr('aria-valuemin','0')
+        bar.attr('aria-valuemax','100')
+        bar.css({'width':'100%'})
+        prog.append(bar)
+        $(".description").append(prog)
     },
     displayAnswers:function(){
         var randOptions = randomizeAnswers(game.round.correct,game.round.incorrect)
@@ -103,7 +113,7 @@ var game = {
         },1000)
     },
     timeOut:function(){
-        console.log('timeoutRan')
+        $(".progress-bar").css({'width':'0%'})
         player.wrong();
         $(".description").children().first().hide()
         $(".description").children().first().text("Ran out of time!")
@@ -112,9 +122,13 @@ var game = {
     },
     displayCounter: function(){
         $('.description').children().first().text(game.timeLeft)
+        $(".progress-bar").css({
+            'width':String((game.timeLeft/settings.initTime)*100)+"%"
+        })
     },
     clear: function(){
         $(".answers").empty()
+        $(".progress").remove()
     },
     result: function(){
         if(player.selection === game.round.correct){
@@ -186,8 +200,6 @@ function findAnswerCard(text){
     var answers = $(".answers").children().first().children()
     for (var i=1 ; i<answers.length;i++){
         var card = answers[i]
-        console.log(card.firstChild.innerHTML)
-        console.log(text)
         if (card.firstChild.innerText === text){
             return $(card) //returning as a jquery element
         }
