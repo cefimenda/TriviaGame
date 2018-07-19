@@ -53,6 +53,7 @@ var game = {
             game.end()
             return
         }
+        game.counter()
         $.ajax({
             url:'https://opentdb.com/api.php?amount=1',
             method:'GET'
@@ -61,7 +62,6 @@ var game = {
             game.round = new Question(response)
             game.displayQuestion()
             game.displayAnswers()
-            game.counter()
             game.questionNumber+=1
             game.displayData()
         })
@@ -85,6 +85,7 @@ var game = {
     answerSelected:false,
     timeLeft:settings.initTime,
     counter: function(){
+        game.displayCounter() //making sure that counter is displayed before or with the question.
         var timer = setInterval(()=>{
             if (game.timeLeft === 0){
                 clearInterval(timer)
