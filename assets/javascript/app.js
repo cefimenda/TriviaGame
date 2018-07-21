@@ -22,7 +22,7 @@ $(function(){
             }
             game.answerSelected=true;
             $(this).addClass('bg-warning')
-            player.selection = $(this).children().first().text()
+            player.selection = $(this).children().first().html()
             game.suspense()
             setTimeout(function(){
                 game.result()
@@ -113,7 +113,37 @@ var game = {
         game.timeLeft = settings.initTime
         player.highscore = localStorage.getItem("highscore-"+settings.qCount)||"0/"+settings.qCount
     },
+    getTestQuestion:function(){
+        game.isThereTime=true
+        if (game.questionNumber >= settings.qCount){
+            game.end()
+            return
+        }
+        game.settingsCheck()
+        game.counter()
+        game.clear()
+        game.round = new Question({
+            results:[{
+                question:"bok",
+                incorrect_answers:["birsey","baskaBirsey","birsey &amp; ben"],
+                correct_answer:"Bir &amp;sey",
+                type:"true/false",
+                category:"test",
+                difficulty:"hardest"
+            }]
+        })
+        game.displayQuestion()
+        game.displayAnswers()
+        game.questionNumber+=1
+        game.displayData()
+        
+    },
+    testing:false,
     getQuestion:function(){
+        if (game.testing ==true){
+            this.getTestQuestion()
+            return
+        }
         game.isThereTime=true
         if (game.questionNumber >= settings.qCount){
             game.end()
@@ -154,6 +184,7 @@ var game = {
         for (var i in randOptions){
             var card = $("<div>").addClass("card shadow-sm my-1 mx-auto text-center rounded w-25 answerOption float-left")
             var answer = $("<p class = 'my-auto'>").html(randOptions[i])
+            card.attr("data",randOptions[i])
             card.append(answer)
             $(".qCard").append(card)
         }
@@ -272,15 +303,15 @@ function Question(response){
 }
 function findAnswerCard(text){
     //replace special character ' 
-    var ind = text.indexOf("&#039;")
-    if (ind > -1){
-        text = text.slice(0,ind)+"'"+text.slice(ind+6)
-    }
+    // var ind = text.indexOf("&#039;")
+    // if (ind > -1){
+    //     text = text.slice(0,ind)+"'"+text.slice(ind+6)
+    // }
 
     var answers = $(".answers").children().first().children()
     for (var i=1 ; i<answers.length;i++){
         var card = answers[i]
-        if (card.firstChild.innerText === text){
+        if (card.getAttribute("data") === text){
             return $(card) //returning as a jquery element
         }
     }
